@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use RuntimeException;
 
 class AuthController extends Controller
@@ -72,17 +71,28 @@ class AuthController extends Controller
     }
 
     /**
-     * @return void
+     * @param Request $request
+     * @return JsonResponse
      * @throws BindingResolutionException
      */
-    public function logout(): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
-        if(Session::has('loginId')){
-            Session::pull('loginId');
+        $request->validate([
+            'email' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        //TODO: add logout functionality
+
+        if($user){
+            $user->tokens()->delete();
             return response()->json([
                 'status' => 'logged out'
             ]);
         }
+        return response()->json([
+            'status' => 'Something went wrong'
+        ]);
     }
 
 }

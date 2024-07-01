@@ -50,14 +50,4 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Set the user's password and encrypt it.
-     *
-     * @param  string  $password
-     * @return void
-     */
-    public function setPasswordAttribute(string $password): void
-    {
-        $this->attributes['password'] = Hash::make($password);
-    }
 }

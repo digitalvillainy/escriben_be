@@ -16,9 +16,8 @@ Route::post('/login',
 
 //TODO: add logout functionality
 Route::post('/logout',
-    function () {
-        return 'hit';
-        // return (new AuthController())->logout();
+    function (Request $request): \Illuminate\Http\JsonResponse {
+        return (new AuthController())->logout($request);
 });
 
 Route::get('/user', function (Request $request) {
