@@ -12,6 +12,7 @@ use RuntimeException;
 class AuthController extends Controller
 {
     /**
+     * NOTE: Register new user
      * @param Request $request
      * @return JsonResponse
      * @throws BindingResolutionException
@@ -42,7 +43,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Login user and create token
+     * NOTE: Login user and create token
      * @param Request $request
      * @return JsonResponse
      * @throws RuntimeException
@@ -72,7 +73,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout user and revoke token
+     * NOTE: Logout user and revoke token
      * @param Request $request
      * @return JsonResponse
      * @throws BindingResolutionException
