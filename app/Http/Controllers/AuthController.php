@@ -42,6 +42,7 @@ class AuthController extends Controller
     }
 
     /**
+     * Login user and create token
      * @param Request $request
      * @return JsonResponse
      * @throws RuntimeException
@@ -71,6 +72,7 @@ class AuthController extends Controller
     }
 
     /**
+     * Logout user and revoke token
      * @param Request $request
      * @return JsonResponse
      * @throws BindingResolutionException
@@ -82,7 +84,6 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        //TODO: add logout functionality
 
         if($user){
             $user->tokens()->delete();
