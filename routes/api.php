@@ -20,7 +20,10 @@ Route::post('/logout',
         return (new AuthController())->logout($request);
 });
 
-// TODO: Develop after other endpoints
+/*
+* NOTE: Be sure to send bearer token in header
+    * Authorization: Bearer <token>
+*/
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');

@@ -17,7 +17,7 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws BindingResolutionException
      */
-    public function registerUser(Request $request): \Illuminate\Http\JsonResponse
+    public function registerUser(Request $request): JsonResponse
     {
         $request->validate([
             'username' => 'required',
@@ -49,7 +49,7 @@ class AuthController extends Controller
      * @throws RuntimeException
      * @throws BindingResolutionException
      */
-    public function loginUser(Request $request): \Illuminate\Http\JsonResponse
+    public function loginUser(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required',
@@ -78,7 +78,7 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws BindingResolutionException
      */
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required'
