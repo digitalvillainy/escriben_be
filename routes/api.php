@@ -42,7 +42,38 @@ Route::post('/logout',
     * Content-Type: application/json
     * Authorization: Bearer <token>
 */
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum');
+});
 
+//TODO: work on User model and updating User create table
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/notebooks', function (Request $request) {
+        return $request->notebooks();
+    });
+
+    Route::get('/notebooks/{notebook}', function (Request $request, $notebook) {
+        return $request->notebook($notebook);
+    });
+
+    Route::post('/notebooks', function (Request $request) {
+        return $request->createNotebook($request->title);
+    });
+});
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/notes', function (Request $request) {
+        return $request->notes();
+    });
+
+    Route::post('/notes', function (Request $request) {
+        return $request->createNote($request->title);
+    });
+
+    Route::get('/notes/{note}', function (Request $request, $note) {
+        return $request->note($note);
+    });
+});
