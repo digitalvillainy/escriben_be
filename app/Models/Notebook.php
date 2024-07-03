@@ -14,6 +14,15 @@ class Notebook extends Model
 
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title',
+        'user_id',
+    ];
+    /**
      * returns a user the notebook belongs to
      *
      * Description.

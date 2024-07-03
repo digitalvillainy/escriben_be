@@ -14,7 +14,7 @@ class NotesController extends Controller
         $note = Notes::create([
             'title' => $request->title,
             'content' => $request->content,
-            'notebook_id' => $request->notebook()->id
+            'notebook_id' => $request->notebook_id
         ]);
 
         return response()->json($note);
@@ -30,7 +30,26 @@ class NotesController extends Controller
     //return all the notes in the notebook
     public function getNotesByNotebook(Request $request): JsonResponse
     {
-        $notes = Notes::where('notebook_id', $request->notebook()->id)->get();
+        $notes = Notes::where('notebook_id', $request->id)->get();
         return response()->json($notes);
+    }
+
+    //Delete a note
+    public function deleteNote(Request $request): JsonResponse
+    {
+        $note = Notes::find($request->id);
+        $note->delete();
+        return response()->json($note);
+    }
+
+    //Update a note
+    public function updateNote(Request $request): JsonResponse
+    {
+        $note = Notes::find($request->id);
+        $note->update([
+            'title' => $request->title,
+            'content' => $request->content
+        ]);
+        return response()->json($note);
     }
 }

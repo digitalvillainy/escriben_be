@@ -71,6 +71,28 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/notebooks', function (Request $request): JsonResponse {
         return (new NotebookController())->createNotebook($request);
     });
+
+    /**
+     * Description: Will update a Notebook for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::patch('/notebooks/{id}', function (Request $request): JsonResponse {
+        return (new NotebookController())->updateNotebook($request);
+    });
+
+    /**
+     * Description: Will delete a Notebook for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::delete('/notebooks/{id}', function (Request $request): JsonResponse {
+        return (new NotebookController())->deleteNotebook($request);
+    });
 });
 
 //NOTE: Be sure to send bearer token in header
@@ -95,5 +117,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::post('/notes', function (Request $request): JsonResponse {
         return (new NotesController())->createNote($request);
+    });
+
+    /**
+     * Description: Will update a Note for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::patch('/notes/{id}', function (Request $request): JsonResponse {
+        return (new NotesController())->updateNote($request);
+    });
+
+    /**
+     * Description: Will delete a Note for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::delete('/notes/{id}', function (Request $request): JsonResponse {
+        return (new NotesController())->deleteNote($request);
     });
 });

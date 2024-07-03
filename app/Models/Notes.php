@@ -10,6 +10,13 @@ class Notes extends Model
 {
     use HasFactory;
 
+    //fillable fields
+    protected $fillable = [
+        'title',
+        'content',
+        'notebook_id',
+    ];
+
     /**
      * Get the notebook that owns the Notes
      *
