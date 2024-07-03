@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content');
-            $table->foreignId('user_id')->index()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('notebook_id')
+                ->constrained(table: 'notebooks', indexName: 'notebook_id_foreign')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
+
         });
     }
 
@@ -25,6 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('notes', function (Blueprint $table) {
+            $table->dropForeign(['notebook_id_foreign']);
+        });
+
         Schema::dropIfExists('notes');
     }
 };

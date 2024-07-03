@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('notebooks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('notes_id')->index()->references('id')->on('notes')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('user_id')->index()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')
+                ->constrained(table: 'users', indexName: 'notebooks_user_id_foreign')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('notebooks', function (Blueprint $table) {
+            $table->dropForeign(['notebooks_user_id_foreign']);
+        });
+
         Schema::dropIfExists('notebooks');
     }
 };

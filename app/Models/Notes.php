@@ -11,23 +11,25 @@ class Notes extends Model
     use HasFactory;
 
     /**
-     * Get the user that owns the Notes
-     *
-     * Description.
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
-
-    /**
      * Get the notebook that owns the Notes
      *
      * Description.
      */
     public function notebook(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Notebook');
+        return $this->belongsTo(Notebook::class);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

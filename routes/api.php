@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotebookController;
+use App\Http\Controllers\NotesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\JsonResponse;
@@ -42,38 +44,56 @@ Route::post('/logout',
     * Content-Type: application/json
     * Authorization: Bearer <token>
 */
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+//NOTE: Be sure to send bearer token in header
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    })->middleware('auth:sanctum');
+    /**
+     * Description: Will get all the notebooks for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::get('/notebooks', function (Request $request): JsonResponse {
+        return (new NotebookController())->getNotebooks($request);
+    });
+
+    /**
+     * Description: Will create a new Notebook for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::post('/notebooks', function (Request $request): JsonResponse {
+        return (new NotebookController())->createNotebook($request);
+    });
 });
 
-//TODO: work on User model and updating User create table
-
+//NOTE: Be sure to send bearer token in header
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/notebooks', function (Request $request) {
-        return $request->notebooks();
+    /**
+     * Description: Will get all the notes in the notebook
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::get('/notes', function (Request $request): JsonResponse {
+        return (new NotesController())->getNotesByNotebook($request);
     });
 
-    Route::get('/notebooks/{notebook}', function (Request $request, $notebook) {
-        return $request->notebook($notebook);
-    });
-
-    Route::post('/notebooks', function (Request $request) {
-        return $request->createNotebook($request->title);
-    });
-});
-
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/notes', function (Request $request) {
-        return $request->notes();
-    });
-
-    Route::post('/notes', function (Request $request) {
-        return $request->createNote($request->title);
-    });
-
-    Route::get('/notes/{note}', function (Request $request, $note) {
-        return $request->note($note);
+    /**
+     * Description: Will create a new Note for a user
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::post('/notes', function (Request $request): JsonResponse {
+        return (new NotesController())->createNote($request);
     });
 });
