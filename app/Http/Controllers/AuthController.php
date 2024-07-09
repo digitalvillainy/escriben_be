@@ -20,11 +20,11 @@ class AuthController extends Controller
     public function registerUser(Request $request): JsonResponse
     {
         $request->validate([
-            'username' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'password' => 'required'
+            'username' => 'required|unique:users',
+            'first_name' => 'required|alpha',
+            'last_name' => 'required|alpha',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8'
         ]);
 
         $user = User::create([
