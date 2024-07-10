@@ -37,9 +37,12 @@ class AuthController extends Controller
 
         $result = $user->save();
 
-        return response()->json([
-            'status' => $result
-        ]);
+        if($result){
+            $token = $user->createToken('auth_token');
+            return response()->json([
+                'token' => $token->plainTextToken
+            ]);
+        }
     }
 
     /**
