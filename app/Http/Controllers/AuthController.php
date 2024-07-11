@@ -38,7 +38,9 @@ class AuthController extends Controller
         $result = $user->save();
 
         if($result){
-            $token = $user->createToken('auth_token');
+            $token = $user->createToken(
+                'auth_token', ['*'], now()->addDays(2)
+            );
             return response()->json([
                 'token' => $token->plainTextToken
             ]);
@@ -55,7 +57,7 @@ class AuthController extends Controller
     public function loginUser(Request $request): JsonResponse
     {
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
@@ -63,7 +65,9 @@ class AuthController extends Controller
 
         if($user){
             if(Hash::check($request->password, $user->password)){
-                $token = $user->createToken('auth_token');
+                $token = $user->createToken(
+                    'auth_token', ['*'], now()->addDays(2)
+                );
                 return response()->json([
                     'token' => $token->plainTextToken
                 ]);
