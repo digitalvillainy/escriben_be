@@ -27,6 +27,18 @@ Route::post('/login',
 });
 
 /*
+* Description: Forgot password
+* Body: email, password
+*/
+//TODO: Setup Forgot Password in AuthController
+Route::post('/forgot-password',
+    function (Request $request): JsonResponse {
+        return (new AuthController())->forgotPassword($request);
+});
+
+
+
+/*
 * NOTE: Be sure to send bearer token in header
     * Description: Will logout current authenticated user
     * Body: authenticated user email

@@ -62,7 +62,6 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-
         if($user){
             if(Hash::check($request->password, $user->password)){
                 $token = $user->createToken(
@@ -76,6 +75,10 @@ class AuthController extends Controller
                     'status' => 'Invalid credentials'
                 ]);
             }
+        } else {
+            return response()->json([
+                'status' => 'Invalid credentials'
+            ]);
         }
     }
 
@@ -103,5 +106,10 @@ class AuthController extends Controller
             'status' => 'Something went wrong'
         ]);
     }
+
+    public function forgotPassword(Request $request){
+        //TODO: Add logic for forgot password
+    }
+
 
 }
