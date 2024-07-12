@@ -16,7 +16,6 @@ Route::post('/register',
         return (new AuthController())->registerUser($request);
 });
 
-
 /*
 * Description: Will login a user and return a token
 * Body: email, password
@@ -28,13 +27,17 @@ Route::post('/login',
 
 /*
 * Description: Forgot password
-* Body: email, password
+* Body: email
 */
 Route::post('/forgot-password',
     function (Request $request): JsonResponse {
         return (new AuthController())->forgotPassword($request);
-})->middleware('guest');
+})->middleware('guest')->name('password.reset');
 
+/*
+* Description: Retrieve password token
+* Body: email
+*/
 Route::get('/reset-password/{token}',
     function (string $token): array {
         return ['token' => $token];
