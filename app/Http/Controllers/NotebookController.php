@@ -14,7 +14,7 @@ class NotebookController extends Controller
     {
         $Notebook = Notebook::create([
             'title' => $request->title,
-            'user_id' => $request->user()->id
+            'user_id' => $request->user()->user_id
         ]);
         return response()->json($Notebook);
     }
@@ -22,14 +22,14 @@ class NotebookController extends Controller
     //return all the notebooks for a user
     public function getNotebooks(Request $request): JsonResponse
     {
-        $notebooks = Notebook::where('user_id', $request->id)->get();
+        $notebooks = Notebook::where('user_id', $request->user_id)->get();
         return response()->json($notebooks);
     }
 
     //Update a Notebook for a user
     public function updateNotebook(Request $request): JsonResponse
     {
-        $notebook = Notebook::find($request->id);
+        $notebook = Notebook::find($request->user_id);
         $notebook->update([
             'title' => $request->title
         ]);
@@ -39,7 +39,7 @@ class NotebookController extends Controller
     //Delete a Notebook for a user
     public function deleteNotebook(Request $request): JsonResponse
     {
-        $notebook = Notebook::find($request->id);
+        $notebook = Notebook::find($request->user_id);
         $notebook->delete();
         return response()->json($notebook);
     }

@@ -65,10 +65,11 @@ class AuthController extends Controller
         if($user){
             if(Hash::check($request->password, $user->password)){
                 $token = $user->createToken(
-                    'auth_token', ['*'], now()->addDays(2)
+                    'token', ['*'], now()->addDays(2)
                 );
                 return response()->json([
-                    'token' => $token->plainTextToken
+                    'token' => $token->plainTextToken,
+                    'user' => $user
                 ]);
             }else{
                 return response()->json([
