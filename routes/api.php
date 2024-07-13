@@ -38,10 +38,10 @@ Route::post('/forgot-password',
 * Description: Retrieve password token
 * Body: email
 */
-Route::get('/reset-password/{token}',
-    function (string $token): array {
-        return ['token' => $token];
-})->middleware('guest');
+Route::get('/reset-password',
+    function (Request $request): JsonResponse {
+        return (new AuthController())->resetPassword($request);
+})->middleware('guest')->name('password.update');
 
 /*
 * NOTE: Be sure to send bearer token in header
