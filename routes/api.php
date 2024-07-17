@@ -79,6 +79,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     /**
+     * Description: Will get a Notebook by notebook id
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    Route::get('/notebooks/{id}', function (Request $request): JsonResponse {
+        return (new NotebookController())->getNotebookById($request);
+    });
+
+    /**
      * Description: Will create a new Notebook for a user
      *
      * @param Request $request

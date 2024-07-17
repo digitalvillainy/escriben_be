@@ -10,13 +10,14 @@ class NotebookController extends Controller
 {
 
     //create a new Notebook for a user
+    //TODO: Add validation
     public function createNotebook(Request $request): JsonResponse
     {
-        $Notebook = Notebook::create([
+        Notebook::create([
             'title' => $request->title,
             'user_id' => $request->user_id
         ]);
-        return response()->json($Notebook);
+        return $this->getNotebooks($request);
     }
 
     //return all the notebooks for a user
@@ -24,6 +25,13 @@ class NotebookController extends Controller
     {
         $notebooks = Notebook::where('user_id', $request->user_id)->get();
         return response()->json($notebooks);
+    }
+
+    //return notebook by id
+    public function getNotebookById(Request $request): JsonResponse
+    {
+        $notebook = Notebook::where('id', $request->notebook_id)->get();
+        return response()->json($notebook);
     }
 
     //Update a Notebook for a user

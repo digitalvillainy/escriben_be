@@ -20,7 +20,7 @@ class NotesController extends Controller
         return response()->json($note);
     }
 
-    //return a note by id
+    //return a note by notebook
     public function getNoteByTitle(Request $request): JsonResponse
     {
         $note = Notes::where('title', $request->title)->first();
