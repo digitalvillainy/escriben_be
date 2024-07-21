@@ -30,7 +30,7 @@ class NotesController extends Controller
     //return all the notes in the notebook
     public function getNotesByNotebook(Request $request): JsonResponse
     {
-        $notes = Notes::where('notebook_id', $request->id)->get();
+        $notes = Notes::where('notebook_id', $request->notebooks_id)->get();
         return response()->json($notes);
     }
 
