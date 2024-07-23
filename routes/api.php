@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    Route::patch('/notebooks/{id}', function (Request $request): JsonResponse {
+    Route::patch('/notebooks', function (Request $request): JsonResponse {
         return (new NotebookController())->updateNotebook($request);
     });
 
@@ -154,7 +154,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    Route::patch('/notes/{id}', function (Request $request): JsonResponse {
+    Route::patch('/notes', function (Request $request): JsonResponse {
         return (new NotesController())->updateNote($request);
     });
 

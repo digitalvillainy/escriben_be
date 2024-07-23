@@ -37,9 +37,10 @@ class NotebookController extends Controller
     //Update a Notebook for a user
     public function updateNotebook(Request $request): JsonResponse
     {
-        $notebook = Notebook::find($request->user_id);
+        $notebook = Notebook::find($request->_id);
         $notebook->update([
-            'title' => $request->title
+            'title' => $request->title,
+            'content' => $request->content
         ]);
         return response()->json($notebook);
     }

@@ -14,7 +14,7 @@ class NotesController extends Controller
         $note = Notes::create([
             'title' => $request->title,
             'content' => $request->content,
-            'notebook_id' => $request->notebook_id
+            'notebook_id' => $request->notebook_id,
         ]);
 
         return response()->json($note);
@@ -24,6 +24,7 @@ class NotesController extends Controller
     public function getNoteByTitle(Request $request): JsonResponse
     {
         $note = Notes::where('title', $request->title)->first();
+
         return response()->json($note);
     }
 
@@ -31,6 +32,7 @@ class NotesController extends Controller
     public function getNotesByNotebook(Request $request): JsonResponse
     {
         $notes = Notes::where('notebook_id', $request->notebook_id)->get();
+
         return response()->json($notes);
     }
 
@@ -39,6 +41,7 @@ class NotesController extends Controller
     {
         $note = Notes::find($request->id);
         $note->delete();
+
         return response()->json($note);
     }
 
@@ -48,8 +51,9 @@ class NotesController extends Controller
         $note = Notes::find($request->id);
         $note->update([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->content,
         ]);
+
         return response()->json($note);
     }
 }
