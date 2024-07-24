@@ -165,7 +165,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * @return JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    Route::delete('/notes/{id}', function (Request $request): JsonResponse {
+    Route::delete('/notes', function (Request $request): JsonResponse {
         return (new NotesController())->deleteNote($request);
     });
 });
