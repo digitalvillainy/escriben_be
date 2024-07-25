@@ -13,11 +13,11 @@ class NotebookController extends Controller
     //TODO: Add validation
     public function createNotebook(Request $request): JsonResponse
     {
-        Notebook::create([
+        $notebook = Notebook::create([
             'title' => $request->title,
             'user_id' => $request->user_id
         ]);
-        return $this->getNotebooks($request);
+        return response()->json($notebook);
     }
 
     //return all the notebooks for a user
