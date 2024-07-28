@@ -119,7 +119,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * @throws \Illuminate\Validation\ValidationException
      */
     Route::delete('/notebooks', function (Request $request): JsonResponse {
-        dd('here');
         return (new NotebookController())->deleteNotebook($request);
     });
 });

@@ -48,8 +48,7 @@ class NotebookController extends Controller
     //Delete a Notebook for a user
     public function deleteNotebook(Request $request): JsonResponse
     {
-        $notebook = Notebook::where('id', $request->notebook_id)->get();
-        $notebook->delete();
-        return response()->json($notebook);
+        $results = Notebook::where('id', $request->notebook_id)->delete();
+        return response()->json($results);
     }
 }
