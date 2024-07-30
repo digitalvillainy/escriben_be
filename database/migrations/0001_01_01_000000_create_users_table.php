@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //TODO: Add a user image
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('username')->unique();
