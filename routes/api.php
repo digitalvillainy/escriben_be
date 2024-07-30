@@ -61,9 +61,17 @@ Route::post('/logout',
     * Content-Type: application/json
     * Authorization: Bearer <token>
 */
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', function (Request $request): JsonResponse {
+        return $request->user();
+    });
+
+    Route::post('/upload-profile-pic', function (Request $request): JsonResponse {
+        return (new AuthController())->uploadProfilePic($request);
+    });
+
+});
 
 //NOTE: Be sure to send bearer token in header
 Route::group(['middleware' => 'auth:sanctum'], function () {

@@ -133,6 +133,22 @@ class AuthController extends Controller
         }
     }
 
+    //Upload Profile Picture
+    public function uploadProfilePic(Request $request): JsonResponse
+    {
+        $request->validate([
+            'profile_pic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $imageName = $request->image->getClientOriginalName();
+
+        $request->image->storeAs('public/images', $imageName);
+
+        return response()->json([
+            'profile_pic' => $imageName
+        ]);
+    }
+
     //Handle Reset Password
     public function resetPassword(Request $request): JsonResponse
     {
@@ -162,6 +178,28 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'email' => __($status)
+            ]);
+        }
+    }
+
+
+    //Update user
+    public function updateUser(Request $request): JsonResponse
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            $user->first_name = $request->first_name;
+            $user->username = $request->username;
+            $user->last_name = $request->last_name;
+            $user->save();
+            return response()->json([
+                'user' => $user
             ]);
         }
     }
