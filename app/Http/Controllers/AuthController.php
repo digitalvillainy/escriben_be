@@ -192,22 +192,27 @@ class AuthController extends Controller
     public function updateUser(Request $request): JsonResponse
     {
         $request->validate([
+            'id' => 'required',
             'first_name' => 'string',
             'last_name' => 'string',
             'email' => 'optional|email',
             'username' => 'string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-        if ($user) {
-            $user->first_name = $request->first_name;
-            $user->username = $request->username;
-            $user->last_name = $request->last_name;
+        $user = User::where('id', $request->id)->first();
+        if ($user && !is_null($request)) {
+
+            $data = $request->all();
+            $user->fill($data);
             $user->save();
 
             return response()->json([
                 'user' => $user,
             ]);
         }
+
+        return response()->json([
+            'status' => 'Something went wrong',
+        ]);
     }
 }
