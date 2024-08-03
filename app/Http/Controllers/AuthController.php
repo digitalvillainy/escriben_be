@@ -133,11 +133,12 @@ class AuthController extends Controller
         }
     }
 
+    //TODO: Add validation for Base64 create a rule and pass the value
     //Upload Profile Picture
     public function uploadProfilePic(Request $request): JsonResponse
     {
         $request->validate([
-            'profile_pic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'profile_pic' => 'required|base64_image:500',
         ]);
 
         $imageName = $request->image->getClientOriginalName();
