@@ -67,6 +67,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         return $request->user();
     });
 
+    Route::post('/update-user', function (Request $request): JsonResponse {
+        return (new AuthController())->updateUser($request);
+    });
+
     Route::post('/upload-profile-pic', function (Request $request): JsonResponse {
         return (new AuthController())->uploadProfilePic($request);
     });

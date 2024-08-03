@@ -192,9 +192,10 @@ class AuthController extends Controller
     public function updateUser(Request $request): JsonResponse
     {
         $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'email' => 'email',
+            'username' => 'string',
         ]);
 
         $user = User::where('email', $request->email)->first();
