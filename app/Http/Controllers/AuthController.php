@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use App\Rules\Base64;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use RuntimeException;
 
@@ -16,8 +17,7 @@ class AuthController extends Controller
 {
     /**
      * NOTE: Register new user
-     * @param Request $request
-     * @return JsonResponse
+     *
      * @throws BindingResolutionException
      */
     public function registerUser(Request $request): JsonResponse
@@ -27,7 +27,7 @@ class AuthController extends Controller
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
         ]);
 
         $user = User::create([
@@ -35,25 +35,27 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         $result = $user->save();
 
-        if($result){
+        if ($result) {
             $token = $user->createToken(
                 'auth_token', ['*'], now()->addDays(2)
             );
+
+            $user->profile_pic = null;
             return response()->json([
-                'token' => $token->plainTextToken
+                'token' => $token->plainTextToken,
+                'user' => $user,
             ]);
         }
     }
 
     /**
      * NOTE: Login user and create token
-     * @param Request $request
-     * @return JsonResponse
+     *
      * @throws RuntimeException
      * @throws BindingResolutionException
      */
@@ -61,53 +63,55 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if($user){
-            if(Hash::check($request->password, $user->password)){
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken(
                     'token', ['*'], now()->addDays(2)
                 );
+
                 return response()->json([
                     'token' => $token->plainTextToken,
-                    'user' => $user
+                    'user' => $user,
                 ]);
-            }else{
+            } else {
                 return response()->json([
-                    'status' => 'Invalid credentials'
+                    'status' => 'Invalid credentials',
                 ]);
             }
         } else {
             return response()->json([
-                'status' => 'Invalid credentials'
+                'status' => 'Invalid credentials',
             ]);
         }
     }
 
     /**
      * NOTE: Logout user and revoke token
-     * @param Request $request
-     * @return JsonResponse
+     *
      * @throws BindingResolutionException
      */
     public function logout(Request $request): JsonResponse
     {
         $request->validate([
-            'email' => 'required'
+            'email' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
-        if($user){
+        if ($user) {
             $user->tokens()->delete();
+
             return response()->json([
-                'status' => 'logged out'
+                'status' => 'logged out',
             ]);
         }
+
         return response()->json([
-            'status' => 'Something went wrong'
+            'status' => 'Something went wrong',
         ]);
     }
 
@@ -124,30 +128,31 @@ class AuthController extends Controller
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json([
-                'status' => __($status)
+                'status' => __($status),
             ]);
         } else {
             return response()->json([
-                'email' => __($status)
+                'email' => __($status),
             ]);
         }
     }
 
-    //TODO: Add validation for Base64 create a rule and pass the value
-    //Upload Profile Picture
+    //Upload Profile Picture with a base64 image
     public function uploadProfilePic(Request $request): JsonResponse
     {
         $request->validate([
-            'profile_pic' => 'required|base64_image:500',
+            'profile_pic' => ['required', new Base64],
+            'id' => 'required',
         ]);
 
-        $imageName = $request->image->getClientOriginalName();
+        $response = User::where('id', $request->id)->first();
 
-        $request->image->storeAs('public/images', $imageName);
+        if ($response) {
+            $response->profile_pic = $request->profile_pic;
+            $response->save();
+        }
 
-        return response()->json([
-            'profile_pic' => $imageName
-        ]);
+        return response()->json($response);
     }
 
     //Handle Reset Password
@@ -163,7 +168,7 @@ class AuthController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password),
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();
@@ -174,15 +179,14 @@ class AuthController extends Controller
 
         if ($status === Password::PASSWORD_RESET) {
             return response()->json([
-                'status' => __($status)
+                'status' => __($status),
             ]);
         } else {
             return response()->json([
-                'email' => __($status)
+                'email' => __($status),
             ]);
         }
     }
-
 
     //Update user
     public function updateUser(Request $request): JsonResponse
@@ -194,15 +198,15 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if($user){
+        if ($user) {
             $user->first_name = $request->first_name;
             $user->username = $request->username;
             $user->last_name = $request->last_name;
             $user->save();
+
             return response()->json([
-                'user' => $user
+                'user' => $user,
             ]);
         }
     }
-
 }
