@@ -49,9 +49,9 @@ class NotebookController extends Controller
     //TODO: Working on Sharing a Notebook with another user
     public function shareNotebook(Request $request): JsonResponse
     {
-        $notebook = Notebook::find($request->id);
+        $notebook = Notebook::find($request->notebook_id);
         $notebook->update([
-            'shared' => $request->shared
+            'shared_with_email' => $request->shared_with_email
         ]);
         return response()->json($notebook);
     }

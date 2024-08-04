@@ -18,6 +18,7 @@ return new class extends Migration
                 ->constrained(table: 'users', indexName: 'notebooks_user_id_foreign')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->string('shared_with_email')->nullable();
             $table->timestamps();
         });
     }
