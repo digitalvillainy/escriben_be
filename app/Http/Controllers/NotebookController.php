@@ -45,6 +45,17 @@ class NotebookController extends Controller
         return response()->json($notebook);
     }
 
+    //Share Notebook
+    //TODO: Working on Sharing a Notebook with another user
+    public function shareNotebook(Request $request): JsonResponse
+    {
+        $notebook = Notebook::find($request->id);
+        $notebook->update([
+            'shared' => $request->shared
+        ]);
+        return response()->json($notebook);
+    }
+
     //Delete a Notebook for a user
     public function deleteNotebook(Request $request): JsonResponse
     {

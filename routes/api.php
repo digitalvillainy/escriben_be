@@ -74,7 +74,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/upload-profile-pic', function (Request $request): JsonResponse {
         return (new AuthController())->uploadProfilePic($request);
     });
-
 });
 
 //NOTE: Be sure to send bearer token in header
@@ -110,6 +109,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::post('/notebooks', function (Request $request): JsonResponse {
         return (new NotebookController())->createNotebook($request);
+    });
+
+    Route::post('/notebooks/share', function (Request $request): JsonResponse {
+        return (new NotebookController())->shareNotebook($request);
     });
 
     /**
