@@ -21,7 +21,9 @@ class Notebook extends Model
     protected $fillable = [
         'title',
         'user_id',
+        'shared_with_email',
     ];
+
     /**
      * returns a user the notebook belongs to
      *
