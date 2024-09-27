@@ -195,12 +195,12 @@ class AuthController extends Controller
             'id' => 'required',
             'first_name' => 'string',
             'last_name' => 'string',
-            'email' => 'optional|email',
+            'email' => 'nullable|email',
             'username' => 'string',
         ]);
 
         $user = User::where('id', $request->id)->first();
-        if ($user && !is_null($request)) {
+        if ($user) {
 
             $data = $request->all();
             $user->fill($data);
